@@ -3,7 +3,9 @@ export class CreateUserDto {
 
   public lastName: string;
 
+  public phone: string;
+
   public email: string;
 
-  public phone: string;
+  public password: string;
 }
