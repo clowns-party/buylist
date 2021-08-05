@@ -1,3 +1,4 @@
+import { ProductService } from './../product/product.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Buylist } from './buylist.entity';
@@ -17,7 +18,15 @@ export class BuylistService {
   }
 
   async getAll(): Promise<Buylist[]> {
-    const lists = await this.buylistRepo.find();
+    const lists = await this.buylistRepo.find({ relations: ['products'] });
     return lists;
+  }
+
+  async findById(id: number) {
+    const list = await this.buylistRepo.findOne(id, {
+      relations: ['products'],
+    });
+
+    return list;
   }
 }

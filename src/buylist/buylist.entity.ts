@@ -28,6 +28,8 @@ export class Buylist {
   })
   status: Statuses;
 
-  @ManyToMany((type) => Product, (product) => product, { nullable: true })
+  @ManyToMany((type) => Product, (product) => product.buylists, {
+    nullable: true,
+  })
   products: Product[];
 }

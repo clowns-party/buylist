@@ -41,6 +41,7 @@ export class Product {
   author: User;
 
   @ManyToMany((type) => Buylist, (buylist) => buylist.products, {
+    eager: true,
     cascade: true,
   })
   @JoinTable()
