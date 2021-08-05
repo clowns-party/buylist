@@ -39,11 +39,4 @@ export class Product {
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'authorId' })
   author: User;
-
-  @ManyToMany((type) => Buylist, (buylist) => buylist.products, {
-    eager: true,
-    cascade: true,
-  })
-  @JoinTable()
-  buylists: Buylist[];
 }

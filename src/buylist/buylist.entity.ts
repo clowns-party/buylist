@@ -1,5 +1,11 @@
 import { Product } from 'src/product/product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 
 export enum Statuses {
   CREATED = 'created',
@@ -28,8 +34,7 @@ export class Buylist {
   })
   status: Statuses;
 
-  @ManyToMany((type) => Product, (product) => product.buylists, {
-    nullable: true,
-  })
+  @ManyToMany((type) => Product, { nullable: true })
+  @JoinTable()
   products: Product[];
 }

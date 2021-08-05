@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { BuylistService } from './buylist.service';
 import { CreateBuylistDto } from './dto/create-buylist.dto';
 
@@ -13,5 +13,10 @@ export class BuylistController {
   @Get()
   getAll() {
     return this.buylistService.getAll();
+  }
+
+  @Get(':id')
+  getOne(@Param('id') id: string) {
+    return this.buylistService.getOne(id);
   }
 }

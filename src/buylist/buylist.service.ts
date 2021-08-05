@@ -22,6 +22,14 @@ export class BuylistService {
     return lists;
   }
 
+  async getOne(id: string) {
+    const list = await this.buylistRepo.findOne({
+      where: { id },
+      relations: ['products', 'products.author'],
+    });
+    return list;
+  }
+
   async findById(id: number) {
     const list = await this.buylistRepo.findOne(id, {
       relations: ['products'],
