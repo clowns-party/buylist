@@ -1,4 +1,4 @@
-import { JwtReqUser } from './auth.types';
+import { JwtReqPayloadUser } from './auth.types';
 import { User } from './../users/user.entity';
 import { UsersService } from './../users/users.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -11,6 +11,9 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
+  async find(email: string) {
+    return this.usersService.findOne(email);
+  }
   async validateUser(email: string, pass: string): Promise<User> {
     try {
       const user = await this.usersService.findOne(email);
@@ -41,7 +44,10 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     } else {
-      const payload: JwtReqUser = { email: existUser.email, sub: existUser.id };
+      const payload: JwtReqPayloadUser = {
+        email: existUser.email,
+        sub: existUser.id,
+      };
       return {
         access_token: this.jwtService.sign(payload),
       };

@@ -1,9 +1,9 @@
-import { ProductService } from './../product/product.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Buylist } from './buylist.entity';
 import { Repository } from 'typeorm';
 import { CreateBuylistDto } from './dto/create-buylist.dto';
+import { JwtReqUser } from 'src/auth/auth.types';
 
 @Injectable()
 export class BuylistService {
@@ -11,8 +11,9 @@ export class BuylistService {
     @InjectRepository(Buylist) private buylistRepo: Repository<Buylist>,
   ) {}
 
-  async create(list: CreateBuylistDto): Promise<Buylist> {
+  async create(list: CreateBuylistDto, user: JwtReqUser): Promise<Buylist> {
     const newList = this.buylistRepo.create(list);
+    newList.owner = user;
     await this.buylistRepo.save(newList);
     return newList;
   }
@@ -25,7 +26,7 @@ export class BuylistService {
   async getOne(id: string) {
     const list = await this.buylistRepo.findOne({
       where: { id },
-      relations: ['products', 'products.author'],
+      relations: ['products', 'products.author', 'owner'],
     });
     return list;
   }

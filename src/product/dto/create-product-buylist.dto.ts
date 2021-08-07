@@ -13,7 +13,5 @@ export class CreateProductBuyList {
 
   public color?: string;
 
-  public author: string;
-
   public buylistId: number;
 }

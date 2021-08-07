@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BuylistService } from 'src/buylist/buylist.service';
 import { Buylist } from 'src/buylist/buylist.entity';
+import { JwtReqUser } from 'src/auth/auth.types';
 
 @Injectable()
 export class ProductService {
@@ -21,9 +22,11 @@ export class ProductService {
     return product;
   }
 
-  async createProductForBuylist(newProduct: CreateProductBuyList) {
-    const { buylistId, author, ...product } = newProduct;
-    const user = await this.usersService.findOne(author);
+  async createProductForBuylist(
+    newProduct: CreateProductBuyList,
+    user: JwtReqUser,
+  ) {
+    const { buylistId, ...product } = newProduct;
     const list = await this.buylistService.findById(buylistId);
     const createdProduct = this.productRepo.create({
       ...product,

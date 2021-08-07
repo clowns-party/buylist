@@ -1,10 +1,13 @@
 import { Product } from 'src/product/product.entity';
+import { User } from 'src/users/user.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 export enum Statuses {
@@ -37,4 +40,8 @@ export class Buylist {
   @ManyToMany((type) => Product, { nullable: true })
   @JoinTable()
   products: Product[];
+
+  @ManyToOne((type) => User)
+  @JoinColumn({ name: 'authorId' })
+  owner: User;
 }
