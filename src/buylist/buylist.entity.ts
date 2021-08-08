@@ -1,3 +1,4 @@
+import { Member } from './../member/member.entity';
 import { Product } from 'src/product/product.entity';
 import { User } from 'src/users/user.entity';
 import {
@@ -44,4 +45,8 @@ export class Buylist {
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'authorId' })
   owner: User;
+
+  @ManyToMany((type) => Member, { nullable: true })
+  @JoinTable()
+  members: Member[];
 }

@@ -10,9 +10,27 @@ export class UsersService {
   constructor(@InjectRepository(User) private usersRepo: Repository<User>) {}
 
   async findOne(email: string): Promise<User> {
-    return this.usersRepo.findOne({
+    const user = await this.usersRepo.findOne({
       where: { email },
     });
+    if (!user) {
+      throw new HttpException(
+        `User with email - ${email} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return user;
+  }
+
+  async findById(id: number): Promise<User> {
+    const user = await this.usersRepo.findOne({ id });
+    if (!user) {
+      throw new HttpException(
+        `User with id ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return user;
   }
 
   async register(user: CreateUserDto): Promise<User> {

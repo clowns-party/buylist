@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { BuylistModule } from './buylist/buylist.module';
 import { ProductModule } from './product/product.module';
+import { InviteModule } from './invite/invite.module';
+import { MemberModule } from './member/member.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { ProductModule } from './product/product.module';
     UsersModule,
     BuylistModule,
     ProductModule,
+    InviteModule,
+    MemberModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,3 @@
-import { Buylist } from 'src/buylist/buylist.entity';
 import { User } from 'src/users/user.entity';
 import {
   Entity,
@@ -6,8 +5,6 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 
 @Entity()
