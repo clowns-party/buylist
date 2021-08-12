@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -33,5 +34,11 @@ export class BuylistController {
   @Get(':id')
   getOne(@Param('id') id: string) {
     return this.buylistService.getOne(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  delete(@Request() req: { user: JwtReqUser }, @Param('id') id: string) {
+    return this.buylistService.delete(Number(id), req.user);
   }
 }

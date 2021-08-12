@@ -38,15 +38,15 @@ export class Buylist {
   })
   status: Statuses;
 
-  @ManyToMany((type) => Product, { nullable: true })
+  @ManyToMany((type) => Product, { nullable: true, onDelete: 'CASCADE' })
   @JoinTable()
   products: Product[];
 
-  @ManyToOne((type) => User)
+  @ManyToOne((type) => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'authorId' })
   owner: User;
 
-  @ManyToMany((type) => Member, { nullable: true })
+  @ManyToMany((type) => Member, { nullable: true, onDelete: 'CASCADE' })
   @JoinTable()
   members: Member[];
 }

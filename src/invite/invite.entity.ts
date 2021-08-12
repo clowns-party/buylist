@@ -19,7 +19,7 @@ export class Invite {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Buylist)
+  @ManyToOne((type) => Buylist, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'buylistId' })
   buylist: Buylist;
 
