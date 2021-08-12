@@ -13,12 +13,6 @@ export class UsersService {
     const user = await this.usersRepo.findOne({
       where: { email },
     });
-    if (!user) {
-      throw new HttpException(
-        `User with email - ${email} not found`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
     return user;
   }
 

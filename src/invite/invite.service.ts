@@ -72,4 +72,35 @@ export class InviteService {
     const updatedInvite = await this.inviteRepo.save(invite);
     return updatedInvite;
   }
+
+  async decline(id: number, user: JwtReqUser) {
+    const invite = await this.findById(id);
+    if (invite.status !== InviteStatuses.EXPECTATION) {
+      throw new HttpException(
+        `You cannot decline this invitation because the status - ${invite.status}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (invite.to.id !== user.id) {
+      throw new HttpException(
+        'This is not your invitation',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    invite.status = InviteStatuses.REJECTED;
+    const updatedInvite = await this.inviteRepo.save(invite);
+    return updatedInvite;
+  }
+
+  async getUserInvites(user: JwtReqUser) {
+    const invites = await this.inviteRepo.find({
+      where: {
+        to: {
+          id: user.id,
+        },
+      },
+      relations: ['buylist', 'from', 'to'],
+    });
+    return invites;
+  }
 }

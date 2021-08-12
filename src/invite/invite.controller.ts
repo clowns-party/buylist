@@ -2,6 +2,7 @@ import { InviteService } from './invite.service';
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   Request,
@@ -28,5 +29,17 @@ export class InviteController {
   @Post('/accept/:id')
   accept(@Request() req: { user: JwtReqUser }, @Param('id') id: string) {
     return this.inviteService.accept(Number(id), req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/decline/:id')
+  decline(@Request() req: { user: JwtReqUser }, @Param('id') id: string) {
+    return this.inviteService.decline(Number(id), req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/my')
+  getUserInites(@Request() req: { user: JwtReqUser }) {
+    return this.inviteService.getUserInvites(req.user);
   }
 }
