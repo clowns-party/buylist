@@ -1,5 +1,8 @@
-export class CreateInviteDto {
-  public buyListId: number;
+import { ApiProperty } from '@nestjs/swagger';
 
+export class CreateInviteDto {
+  @ApiProperty()
+  public buyListId: number;
+  @ApiProperty()
   public to: number;
 }
