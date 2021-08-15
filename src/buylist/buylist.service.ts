@@ -5,6 +5,7 @@ import { Buylist } from './buylist.entity';
 import { Repository } from 'typeorm';
 import { CreateBuylistDto } from './dto/create-buylist.dto';
 import { Member } from 'src/member/member.entity';
+import { UpdateBuylistDto } from './dto/update-buylist.dto';
 
 @Injectable()
 export class BuylistService {
@@ -70,6 +71,29 @@ export class BuylistService {
     } else {
       throw new HttpException(
         `Buylist not found or you not owner!`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async update(id: number, fields: UpdateBuylistDto, user: JwtReqUser) {
+    const buylist = await this.findById(id);
+    const isMember =
+      Boolean(
+        buylist?.members?.length &&
+          buylist?.members.find((member) => member.id === user?.id),
+      ) || buylist?.owner?.id === user.id;
+
+    if (isMember) {
+      const updatedFieldsBuylist = {
+        ...buylist,
+        ...fields,
+      };
+      const updated = await this.buylistRepo.save(updatedFieldsBuylist);
+      return updated;
+    } else {
+      throw new HttpException(
+        `Permission denied, you not member `,
         HttpStatus.BAD_REQUEST,
       );
     }

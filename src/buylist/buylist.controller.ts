@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Request,
   UseGuards,
@@ -12,6 +13,7 @@ import { JwtReqUser } from 'src/auth/auth.types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { BuylistService } from './buylist.service';
 import { CreateBuylistDto } from './dto/create-buylist.dto';
+import { UpdateBuylistDto } from './dto/update-buylist.dto';
 
 @Controller('buylist')
 export class BuylistController {
@@ -40,5 +42,15 @@ export class BuylistController {
   @Delete(':id')
   delete(@Request() req: { user: JwtReqUser }, @Param('id') id: string) {
     return this.buylistService.delete(Number(id), req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Request() req: { user: JwtReqUser },
+    @Body() dto: UpdateBuylistDto,
+  ) {
+    return this.buylistService.update(Number(id), dto, req.user);
   }
 }
