@@ -1,18 +1,36 @@
+import { GET_BUYLIST_CACHE_KEY } from './constants/buylistCacheKey.constant';
 import { JwtReqUser } from './../auth/auth.types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Buylist } from './buylist.entity';
 import { Repository } from 'typeorm';
 import { CreateBuylistDto } from './dto/create-buylist.dto';
 import { Member } from 'src/member/member.entity';
 import { UpdateBuylistDto } from './dto/update-buylist.dto';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class BuylistService {
   constructor(
     @InjectRepository(Member) private memberRepo: Repository<Member>,
     @InjectRepository(Buylist) private buylistRepo: Repository<Buylist>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
+
+  async clearCache() {
+    const keys: string[] = await this.cacheManager.store.keys();
+    keys.forEach((key) => {
+      if (key.startsWith(GET_BUYLIST_CACHE_KEY)) {
+        this.cacheManager.del(key);
+      }
+    });
+  }
 
   async getAll(): Promise<Buylist[]> {
     const lists = await this.buylistRepo.find({ relations: ['products'] });
@@ -59,7 +77,7 @@ export class BuylistService {
     await this.memberRepo.save(firstMember);
     buylist.members = [firstMember];
     const buyListWithMembers = await this.buylistRepo.save(buylist);
-
+    await this.clearCache();
     return buyListWithMembers;
   }
 
@@ -67,6 +85,7 @@ export class BuylistService {
     const buylist = await this.findById(id);
     if (buylist && buylist.owner.id === user.id) {
       const result = await this.buylistRepo.delete(id);
+      await this.clearCache();
       return result;
     } else {
       throw new HttpException(
@@ -90,6 +109,7 @@ export class BuylistService {
         ...fields,
       };
       const updated = await this.buylistRepo.save(updatedFieldsBuylist);
+      await this.clearCache();
       return updated;
     } else {
       throw new HttpException(

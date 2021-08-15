@@ -1,5 +1,8 @@
 import {
   Body,
+  CacheKey,
+  CacheTTL,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -8,13 +11,17 @@ import {
   Post,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { JwtReqUser } from 'src/auth/auth.types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { HttpCacheInterceptor } from 'src/utils/interceptors/httpCache.interceptor';
 import { BuylistService } from './buylist.service';
+import { GET_BUYLIST_CACHE_KEY } from './constants/buylistCacheKey.constant';
 import { CreateBuylistDto } from './dto/create-buylist.dto';
 import { UpdateBuylistDto } from './dto/update-buylist.dto';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('buylist')
 export class BuylistController {
   constructor(private readonly buylistService: BuylistService) {}
@@ -28,6 +35,9 @@ export class BuylistController {
     return this.buylistService.create(list, req.user);
   }
 
+  @UseInterceptors(HttpCacheInterceptor)
+  @CacheKey(GET_BUYLIST_CACHE_KEY)
+  @CacheTTL(120)
   @Get()
   getAll() {
     return this.buylistService.getAll();
