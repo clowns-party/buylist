@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -7,7 +7,6 @@ export class User {
   id: number;
 
   @Column()
-  @Expose()
   firstName: string;
 
   @Column()
@@ -19,6 +18,7 @@ export class User {
   @Column()
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 }

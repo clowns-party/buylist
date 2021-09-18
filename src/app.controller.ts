@@ -16,9 +16,6 @@ import { JwtReqUser } from './auth/auth.types';
 import { Request as RequestExpress } from 'express';
 
 @Controller()
-// @SerializeOptions({
-//   strategy: 'excludeAll',
-// })
 export class AppController {
   constructor(
     private readonly appService: AppService,
