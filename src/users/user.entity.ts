@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -6,6 +7,7 @@ export class User {
   id: number;
 
   @Column()
+  @Expose()
   firstName: string;
 
   @Column()

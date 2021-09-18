@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { JwtReqPayloadUser } from './auth.types';
 import { User } from './../users/user.entity';
 import { UsersService } from './../users/users.service';
@@ -10,6 +11,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
   async find(email: string) {
     return this.usersService.findOne(email);
@@ -48,9 +50,17 @@ export class AuthService {
         email: existUser.email,
         sub: existUser.id,
       };
+      const token = this.jwtService.sign(payload);
+      const cookie = this.getCookieWithJwtToken(token);
       return {
-        access_token: this.jwtService.sign(payload),
+        access_token: token,
+        cookie,
       };
     }
+  }
+  public getCookieWithJwtToken(token: string) {
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_EXPIRATION_TIME',
+    )}`;
   }
 }
