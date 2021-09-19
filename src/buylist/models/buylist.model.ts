@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Product } from 'src/product/product.model';
-import { User } from 'src/users/users.model';
-import { Statuses } from './buylist.entity';
+import { Product } from 'src/product/models/product.model';
+import { User } from 'src/users/models/users.model';
+import { Statuses } from '../buylist.entity';
 
 registerEnumType(Statuses, {
   name: 'Statuses',

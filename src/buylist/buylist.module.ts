@@ -9,6 +9,7 @@ import { BuylistController } from './buylist.controller';
 import { Buylist } from './buylist.entity';
 import { BuylistResolver } from './buylist.resolver';
 import { BuylistService } from './buylist.service';
+import BuylistsLoaders from './loaders/buylist.loaders';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { BuylistService } from './buylist.service';
     }),
     TypeOrmModule.forFeature([Buylist, Member, User]),
   ],
-  providers: [BuylistService, BuylistResolver, UsersService],
+  providers: [BuylistService, BuylistResolver, UsersService, BuylistsLoaders],
   controllers: [BuylistController],
 })
 export class BuylistModule {}

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
@@ -25,6 +25,12 @@ export class UsersService {
       );
     }
     return user;
+  }
+
+  async getByIds(ids: number[]) {
+    return this.usersRepo.find({
+      where: { id: In(ids) },
+    });
   }
 
   async register(user: CreateUserDto): Promise<User> {
