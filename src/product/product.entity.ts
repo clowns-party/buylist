@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  Index,
+  RelationId,
 } from 'typeorm';
 
 @Entity()
@@ -33,7 +35,11 @@ export class Product {
   @Column({ nullable: true })
   color: string;
 
+  @Index('product_authorId_index')
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'authorId' })
   author: User;
+
+  @RelationId((product: Product) => product.author)
+  public authorId: number;
 }

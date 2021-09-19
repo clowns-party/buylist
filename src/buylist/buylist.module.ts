@@ -1,11 +1,14 @@
+import { CacheModule, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as redisStore from 'cache-manager-redis-store';
-import { CacheModule, Module } from '@nestjs/common';
-import { BuylistService } from './buylist.service';
-import { Buylist } from './buylist.entity';
-import { BuylistController } from './buylist.controller';
 import { Member } from 'src/member/member.entity';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from 'src/users/user.entity';
+import { UsersService } from './../users/users.service';
+import { BuylistController } from './buylist.controller';
+import { Buylist } from './buylist.entity';
+import { BuylistResolver } from './buylist.resolver';
+import { BuylistService } from './buylist.service';
 
 @Module({
   imports: [
@@ -19,9 +22,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         ttl: 120,
       }),
     }),
-    TypeOrmModule.forFeature([Buylist, Member]),
+    TypeOrmModule.forFeature([Buylist, Member, User]),
   ],
-  providers: [BuylistService],
+  providers: [BuylistService, BuylistResolver, UsersService],
   controllers: [BuylistController],
 })
 export class BuylistModule {}
