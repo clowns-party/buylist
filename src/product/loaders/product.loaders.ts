@@ -3,12 +3,12 @@ import { UsersService } from '../../users/users.service';
 import * as DataLoader from 'dataloader';
 
 @Injectable({ scope: Scope.REQUEST })
-export default class BuylistsLoaders {
+export default class ProductLoaders {
   constructor(private usersService: UsersService) {}
 
-  public readonly batchOwners = new DataLoader(async (ownersIds: number[]) => {
-    const users = await this.usersService.getByIds(ownersIds);
+  public readonly batchAuthors = new DataLoader(async (authorIds: number[]) => {
+    const users = await this.usersService.getByIds(authorIds);
     const usersMap = new Map(users.map((user) => [user.id, user]));
-    return ownersIds.map((authorId) => usersMap.get(authorId));
+    return authorIds.map((authorId) => usersMap.get(authorId));
   });
 }

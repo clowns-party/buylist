@@ -10,6 +10,8 @@ import { User } from 'src/users/user.entity';
 import { Member } from 'src/member/member.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
+import { ProductResolver } from './product.resolver';
+import ProductLoaders from 'src/product/loaders/product.loaders';
 
 @Module({
   imports: [
@@ -25,7 +27,13 @@ import * as redisStore from 'cache-manager-redis-store';
     }),
     TypeOrmModule.forFeature([Product, Buylist, User, Member]),
   ],
-  providers: [ProductService, BuylistService, UsersService],
+  providers: [
+    ProductService,
+    BuylistService,
+    UsersService,
+    ProductResolver,
+    ProductLoaders,
+  ],
   controllers: [ProductController],
 })
 export class ProductModule {}

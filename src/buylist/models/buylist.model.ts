@@ -32,12 +32,4 @@ export class Buylist {
 
   @Field()
   owner: User;
-
-  //   @ManyToOne((type) => User, { onDelete: 'CASCADE' })
-  //   @JoinColumn({ name: 'authorId' })
-  //   owner: User;
-
-  //   @ManyToMany((type) => Member, { nullable: true, onDelete: 'CASCADE' })
-  //   @JoinTable()
-  //   members: Member[];
 }
