@@ -7,9 +7,12 @@ export class Member {
   @Field(() => Int)
   id: number;
 
-  @Field()
-  buylist: Buylist;
+  // @Field()
+  // buylist: Buylist;
 
   @Field()
   user: User;
+
+  @Field(() => Int)
+  userId: number;
 }

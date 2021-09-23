@@ -1,35 +1,16 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Member } from 'src/member/models/member.model';
 import { Product } from 'src/product/models/product.model';
 import { User } from 'src/users/models/users.model';
 import { Statuses } from '../buylist.entity';
+import { Buylists } from './buylists.model';
 
 registerEnumType(Statuses, {
   name: 'Statuses',
 });
 
 @ObjectType()
-export class Buylist {
-  @Field(() => Int)
-  id: number;
-
-  @Field()
-  name: string;
-
-  @Field()
-  description: string;
-
-  @Field(() => Int)
-  totalPrice: number;
-
-  @Field((type) => Statuses)
-  status: Statuses;
-
-  @Field((type) => [Product])
-  products: Product[];
-
-  @Field(() => Int)
-  ownerId: number;
-
-  @Field()
-  owner: User;
+export class Buylist extends Buylists {
+  @Field((type) => [Member])
+  members: Member[];
 }

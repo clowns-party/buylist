@@ -11,7 +11,7 @@ import { Member } from 'src/member/member.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { ProductResolver } from './product.resolver';
-import ProductLoaders from 'src/product/loaders/product.loaders';
+import UsersLoaders from 'src/users/loaders/users.loaders';
 
 @Module({
   imports: [
@@ -32,7 +32,7 @@ import ProductLoaders from 'src/product/loaders/product.loaders';
     BuylistService,
     UsersService,
     ProductResolver,
-    ProductLoaders,
+    UsersLoaders,
   ],
   controllers: [ProductController],
 })

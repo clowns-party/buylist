@@ -1,25 +1,25 @@
 import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { User } from 'src/users/models/users.model';
-import ProductLoaders from '../product/loaders/product.loaders';
-import { BuylistService } from './buylist.service';
-import { Buylist } from './models/buylist.model';
+import UsersLoaders from '../../users/loaders/users.loaders';
+import { BuylistService } from '../buylist.service';
+import { Buylists } from '../models/buylists.model';
 
-@Resolver(() => Buylist)
-export class BuylistResolver {
+@Resolver(() => Buylists)
+export class BuylistsResolver {
   constructor(
     private buylistService: BuylistService,
-    private productLoaders: ProductLoaders,
+    private usersLoaders: UsersLoaders,
   ) {}
 
-  @Query(() => [Buylist])
+  @Query(() => [Buylists])
   async buylists() {
     const buylists = await this.buylistService.getAll();
     return buylists;
   }
   // add Index and RelationId for fetch this relation
   @ResolveField('owner', () => User)
-  async getOwner(@Parent() buylist: Buylist) {
+  async getOwner(@Parent() buylist: Buylists) {
     const { ownerId } = buylist;
-    return this.productLoaders.batchAuthors.load(ownerId);
+    return this.usersLoaders.batchAuthors.load(ownerId);
   }
 }

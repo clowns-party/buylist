@@ -1,9 +1,9 @@
 import { Injectable, Scope } from '@nestjs/common';
-import { UsersService } from '../../users/users.service';
+import { UsersService } from '../users.service';
 import * as DataLoader from 'dataloader';
 
 @Injectable({ scope: Scope.REQUEST })
-export default class ProductLoaders {
+export default class UsersLoaders {
   constructor(private usersService: UsersService) {}
 
   public readonly batchAuthors = new DataLoader(async (authorIds: number[]) => {
