@@ -11,6 +11,7 @@ import { InviteModule } from './invite/invite.module';
 import { MemberModule } from './member/member.module';
 import { ProductModule } from './product/product.module';
 import { UsersModule } from './users/users.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UsersModule } from './users/users.module';
     ProductModule,
     InviteModule,
     MemberModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
