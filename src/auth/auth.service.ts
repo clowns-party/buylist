@@ -38,7 +38,7 @@ export class AuthService {
       );
     }
   }
-  async login(user: User) {
+  async login(user: User | Pick<User, 'email'>) {
     const existUser = await this.usersService.findOne(user.email);
     if (!existUser) {
       throw new HttpException(
