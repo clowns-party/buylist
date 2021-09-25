@@ -1,9 +1,9 @@
-import { JwtReqPayloadUser, JwtReqUser } from './auth.types';
-import { jwtConstants } from './constants';
+import { JwtReqPayloadUser, JwtReqUser } from '../auth.types';
+import { jwtConstants } from '../constants';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
 import { Request } from 'express';
 
 @Injectable()

@@ -10,7 +10,7 @@ import {
   Patch,
   Get,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { JwtReqUser } from 'src/auth/auth.types';
 import { Delete } from '@nestjs/common';
 import { UpdateProductBuyList } from './dto/update-product-buylist.dto';

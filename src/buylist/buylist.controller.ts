@@ -14,7 +14,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { JwtReqUser } from 'src/auth/auth.types';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { HttpCacheInterceptor } from 'src/utils/interceptors/httpCache.interceptor';
 import { BuylistService } from './buylist.service';
 import { GET_BUYLIST_CACHE_KEY } from './constants/buylistCacheKey.constant';
