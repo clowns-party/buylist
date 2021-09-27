@@ -69,7 +69,7 @@ export class ProductService {
       );
     }
   }
-
+  // Todo guard for check as CREATOR or Member!
   async updateProduct(updateProduct: {
     fields: UpdateProductBuyList;
     productId: number;

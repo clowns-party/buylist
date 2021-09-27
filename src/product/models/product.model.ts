@@ -12,7 +12,7 @@ export class Product {
   @Field(() => Int)
   price: number;
 
-  @Field()
+  @Field({ nullable: true })
   link: string;
 
   @Field(() => [String], { nullable: true })

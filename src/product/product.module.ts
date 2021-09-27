@@ -10,7 +10,7 @@ import { User } from 'src/users/user.entity';
 import { Member } from 'src/member/member.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
-import { ProductResolver } from './product.resolver';
+import { ProductResolver } from './resolvers/product.resolver';
 import UsersLoaders from 'src/users/loaders/users.loaders';
 
 @Module({
