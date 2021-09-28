@@ -11,6 +11,7 @@ import { MemberService } from 'src/member/member.service';
 import { InviteController } from './invite.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
+import { InviteResolver } from './resolvers/intive.resolver';
 
 @Module({
   imports: [
@@ -26,7 +27,13 @@ import * as redisStore from 'cache-manager-redis-store';
     }),
     TypeOrmModule.forFeature([Invite, Buylist, User, Member]),
   ],
-  providers: [InviteService, BuylistService, UsersService, MemberService],
+  providers: [
+    InviteService,
+    BuylistService,
+    UsersService,
+    MemberService,
+    InviteResolver,
+  ],
   controllers: [InviteController],
 })
 export class InviteModule {}

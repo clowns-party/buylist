@@ -14,6 +14,8 @@ import { CreateBuylistDto } from './dto/create-buylist.dto';
 import { Member } from 'src/member/member.entity';
 import { UpdateBuylistDto } from './dto/update-buylist.dto';
 import { Cache } from 'cache-manager';
+import { User } from 'src/users/user.entity';
+import { uniqueElements } from 'src/utils/arrays/uniqueElements';
 
 @Injectable()
 export class BuylistService {
@@ -35,6 +37,42 @@ export class BuylistService {
   async getAll(): Promise<Buylist[]> {
     const lists = await this.buylistRepo.find({ relations: ['products'] });
     return lists;
+  }
+
+  async getUserBuylists(user: User) {
+    // buylists search in main repo
+    const buylistsAsOwner = await this.buylistRepo.find({
+      where: {
+        owner: {
+          id: user.id,
+        },
+      },
+      relations: ['products', 'members'],
+    });
+    // buylists search in member repo
+    const buylistsAsMemberResult = await this.memberRepo.find({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+      relations: ['user', 'buylist', 'buylist.products'],
+    });
+
+    const buylistsAsMember = buylistsAsMemberResult?.length
+      ? buylistsAsMemberResult.map(({ buylist }) => buylist)
+      : null;
+
+    if (!buylistsAsMember) {
+      return buylistsAsOwner;
+    }
+    // unique with merge between members and buylists
+    const merged = uniqueElements(
+      [...buylistsAsMember, ...buylistsAsOwner],
+      'id',
+    );
+
+    return merged;
   }
 
   async getOne(id: string) {
