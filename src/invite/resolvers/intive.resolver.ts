@@ -19,7 +19,7 @@ export class InviteResolver {
   }
 
   @UseGuards(GraphqlJwtAuthGuard)
-  @Mutation(() => Buylist)
+  @Mutation(() => Invite)
   async acceptInvite(
     @Args('id', { type: () => Int }) inviteId: number,
     @Context() context: { req: { user: JwtReqUser } },
@@ -47,5 +47,14 @@ export class InviteResolver {
       { buyListId, to: toUserId },
       context.req.user,
     );
+  }
+
+  @UseGuards(GraphqlJwtAuthGuard)
+  @Mutation(() => Boolean)
+  async leave(
+    @Args('id', { type: () => Int }) inviteId: number,
+    @Context() context: { req: { user: JwtReqUser } },
+  ) {
+    return this.inviteService.leave(inviteId, context.req.user);
   }
 }

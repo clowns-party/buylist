@@ -5,6 +5,8 @@ import { BuylistService } from 'src/buylist/buylist.service';
 import { Repository } from 'typeorm';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { Buylist } from 'src/buylist/buylist.entity';
+import { User } from 'src/users/user.entity';
+import { Invite } from 'src/invite/invite.entity';
 
 @Injectable()
 export class MemberService {
@@ -39,5 +41,19 @@ export class MemberService {
     }
     const updatedList = await this.buylistRepo.save(buylist);
     return updatedList;
+  }
+
+  async leave(invite: Invite, user: User) {
+    const { buylist } = invite;
+    const memberId = buylist.members.find(
+      (member) => member.userId === user.id,
+    );
+    buylist.members = buylist.members.filter(
+      (member) => member.userId !== user.id,
+    );
+    await this.buylistRepo.save(buylist);
+    await this.memberRepo.delete({ id: memberId.id });
+
+    return true;
   }
 }

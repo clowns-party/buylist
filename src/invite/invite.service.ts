@@ -19,7 +19,7 @@ export class InviteService {
 
   async findById(id: number) {
     const invite = await this.inviteRepo.findOne(id, {
-      relations: ['buylist', 'from', 'to'],
+      relations: ['buylist', 'from', 'to', 'buylist.members'],
     });
     if (!invite) {
       throw new HttpException(
@@ -90,6 +90,28 @@ export class InviteService {
     invite.status = InviteStatuses.REJECTED;
     const updatedInvite = await this.inviteRepo.save(invite);
     return updatedInvite;
+  }
+  // Todo maybe bulistId (long await)
+  async leave(id: number, user: JwtReqUser) {
+    const invite = await this.findById(id);
+
+    if (invite.buylist.ownerId === user.id) {
+      throw new HttpException(
+        'You cant leave from this buylist, buy you owner!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (invite.to.id !== user.id) {
+      throw new HttpException(
+        'This is not your invitation',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const result = await this.memberService.leave(invite, user);
+    await this.inviteRepo.delete(invite.id);
+    return result;
   }
 
   async getUserInvites(user: JwtReqUser) {
