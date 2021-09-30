@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Get,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { JwtReqUser } from 'src/auth/auth.types';
@@ -30,8 +31,9 @@ export class ProductController {
   createProductInList(
     @Request() req: { user: JwtReqUser },
     @Body() newProduct: CreateProductBuyList,
+    @Query('buyListId') buyListId: number,
   ) {
-    return this.productService.createProduct(newProduct, req.user);
+    return this.productService.createProduct(newProduct, buyListId, req.user);
   }
 
   @UseGuards(JwtAuthGuard)

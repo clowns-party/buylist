@@ -14,6 +14,7 @@ import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { Buylist } from 'src/buylist/models/buylist.model';
 import UsersLoaders from 'src/users/loaders/users.loaders';
 import { User } from 'src/users/models/users.model';
+import { ProductsGuards } from '../guards/products.guard';
 import { CreateProductBuyListInput } from '../inputs/create-product-buylist.input';
 import { UpdateProductBuyListInput } from '../inputs/update-product-buylist.input';
 import { Product } from '../models/product.model';
@@ -26,6 +27,7 @@ export class ProductResolver {
     private usersLoaders: UsersLoaders,
   ) {}
 
+  // Todo maybe guard, only owners or members from current buylist with this product, can view?
   @Query(() => Product)
   async product(@Args('id', { type: () => Int }) id: number) {
     const product = await this.productService.findProduct(id);
@@ -38,21 +40,26 @@ export class ProductResolver {
     return this.usersLoaders.batchAuthors.load(authorId);
   }
 
-  @UseGuards(GraphqlJwtAuthGuard)
+  @UseGuards(GraphqlJwtAuthGuard, ProductsGuards)
   @Mutation(() => Buylist)
   async createProduct(
     @Args('input') product: CreateProductBuyListInput,
+    @Args('buyListId', { type: () => Int }) buyListId: number,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
-    return this.productService.createProduct(product, context?.req?.user);
+    return this.productService.createProduct(
+      product,
+      buyListId,
+      context?.req?.user,
+    );
   }
 
-  @UseGuards(GraphqlJwtAuthGuard)
+  @UseGuards(GraphqlJwtAuthGuard, ProductsGuards)
   @Mutation(() => Buylist)
   async updateProduct(
     @Args('input') product: UpdateProductBuyListInput,
-    @Args('productId', { type: () => Int }) productId: number,
     @Args('buyListId', { type: () => Int }) buyListId: number,
+    @Args('productId', { type: () => Int }) productId: number,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
     return this.productService.updateProduct({
@@ -62,7 +69,7 @@ export class ProductResolver {
     });
   }
 
-  @UseGuards(GraphqlJwtAuthGuard)
+  @UseGuards(GraphqlJwtAuthGuard, ProductsGuards)
   @Mutation(() => Buylist)
   async deleteProduct(
     @Args('productId', { type: () => Int }) productId: number,

@@ -15,6 +15,4 @@ export class CreateProductBuyList {
   public buyBefore?: Date;
   @ApiProperty()
   public color?: string;
-  @ApiProperty()
-  public buylistId: number;
 }

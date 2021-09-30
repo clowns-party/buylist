@@ -38,7 +38,27 @@ export class InviteService {
       );
     }
     const buylist = await this.buylistService.findById(invite.buyListId);
-    // Нужна проверка пользователя, есть ли он в этом списке(для from), для приглашения
+    // Todo later guard
+    const isMember = buylist.members.find(
+      (member) => member.userId === user.id,
+    );
+    if (!isMember) {
+      throw new HttpException(
+        'You not member this buylist!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    // Check newMember is exist
+    const memberExist = buylist.members.find(
+      (member) => member.userId === invite.to,
+    );
+    if (memberExist) {
+      throw new HttpException(
+        'This user is member this buylist!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const to = await this.usersService.findById(invite.to);
     const created = this.inviteRepo.create({
       buylist,

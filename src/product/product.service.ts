@@ -30,8 +30,11 @@ export class ProductService {
     return product;
   }
 
-  async createProduct(newProduct: CreateProductBuyList, user: JwtReqUser) {
-    const { buylistId, ...product } = newProduct;
+  async createProduct(
+    product: CreateProductBuyList,
+    buylistId: number,
+    user: JwtReqUser,
+  ) {
     const list = await this.buylistService.findById(buylistId);
     const createdProduct = this.productRepo.create({
       ...product,

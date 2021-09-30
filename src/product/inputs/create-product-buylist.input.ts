@@ -16,6 +16,4 @@ export class CreateProductBuyListInput {
   public buyBefore?: Date;
   @Field({ nullable: true })
   public color?: string;
-  @Field()
-  public buylistId: number;
 }
