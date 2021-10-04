@@ -1,0 +1,153 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  firstName: String!
+  lastName: String!
+  phone: String!
+  email: String!
+}
+
+type Product {
+  id: Int!
+  name: String!
+  price: Int!
+  link: String
+  coordinate: [String!]
+  comment: String!
+  buyBefore: DateTime
+  color: String
+  authorId: Int!
+  author: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Buylists {
+  id: Int!
+  name: String!
+  description: String!
+  totalPrice: Int!
+  status: Statuses!
+  products: [Product!]!
+  ownerId: Int!
+  owner: User!
+}
+
+enum Statuses {
+  CREATED
+  CURRENT
+  CLOSED
+}
+
+type Member {
+  id: Int!
+  user: User!
+  userId: Int!
+}
+
+type Buylist {
+  id: Int!
+  name: String!
+  description: String!
+  totalPrice: Int!
+  status: Statuses!
+  products: [Product!]!
+  ownerId: Int!
+  owner: User!
+  members: [Member!]!
+}
+
+type Invite {
+  id: Int!
+  buylist: Buylist!
+  from: User!
+  to: User!
+  status: InviteStatuses!
+}
+
+enum InviteStatuses {
+  EXPECTATION
+  REJECTED
+  ACCEPTED
+}
+
+type Query {
+  buylists: [Buylists!]!
+  myBuylists: [Buylists!]!
+  buylist(id: Int!): Buylist!
+  product(id: Int!): Product!
+  myInvites: [Invite!]!
+  profile: User!
+}
+
+type Mutation {
+  register(input: AuthRegisterInput!): User!
+  login(input: AuthLoginInput!): String!
+  createList(input: CreateBuylistInput!): Buylist!
+  updateList(id: Int!, input: UpdateBuylistInput!): Buylist!
+  deleteList(id: Int!): Boolean!
+  createProduct(buyListId: Int!, input: CreateProductBuyListInput!): Buylist!
+  updateProduct(productId: Int!, buyListId: Int!, input: UpdateProductBuyListInput!): Buylist!
+  deleteProduct(buyListId: Int!, productId: Int!): Buylist!
+  acceptInvite(id: Int!): Invite!
+  declineInvite(id: Int!): Buylist!
+  invite(toUserId: Int!, buyListId: Int!): Buylist!
+  leave(id: Int!): Boolean!
+}
+
+input AuthRegisterInput {
+  firstName: String!
+  lastName: String!
+  phone: String!
+  email: String!
+  password: String!
+}
+
+input AuthLoginInput {
+  email: String!
+  password: String!
+}
+
+input CreateBuylistInput {
+  name: String!
+  description: String!
+  totalPrice: Float!
+  status: Statuses!
+}
+
+input UpdateBuylistInput {
+  name: String
+  description: String
+  totalPrice: Float
+  status: Statuses
+}
+
+input CreateProductBuyListInput {
+  name: String!
+  price: Float!
+  link: String
+  coordinate: [String!]
+  comment: String!
+  buyBefore: DateTime
+  color: String
+}
+
+input UpdateProductBuyListInput {
+  name: String
+  price: Float
+  link: String
+  coordinate: [String!]
+  comment: String
+  buyBefore: DateTime
+  color: String
+}
+
+type Subscription {
+  buylistAdded: Buylist!
+}

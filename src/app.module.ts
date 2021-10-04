@@ -12,6 +12,8 @@ import { MemberModule } from './member/member.module';
 import { ProductModule } from './product/product.module';
 import { UsersModule } from './users/users.module';
 import { ProfileModule } from './profile/profile.module';
+import { PubSubModule } from './pub-sub/pub-sub.module';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -28,7 +30,8 @@ import { ProfileModule } from './profile/profile.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         playground: Boolean(configService.get('GRAPHQL_PLAYGROUND')),
-        autoSchemaFile: true,
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        installSubscriptionHandlers: true,
       }),
     }),
     AuthModule,
@@ -38,6 +41,7 @@ import { ProfileModule } from './profile/profile.module';
     InviteModule,
     MemberModule,
     ProfileModule,
+    PubSubModule,
   ],
   controllers: [AppController],
   providers: [AppService],

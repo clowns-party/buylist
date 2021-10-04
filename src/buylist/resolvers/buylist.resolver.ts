@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import {
   Args,
@@ -8,9 +9,12 @@ import {
   Query,
   ResolveField,
   Resolver,
+  Subscription,
 } from '@nestjs/graphql';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { JwtReqUser } from 'src/auth/auth.types';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
+import { PUB_SUB } from 'src/pub-sub/pub-sub.module';
 import { User } from 'src/users/models/users.model';
 import UsersLoaders from '../../users/loaders/users.loaders';
 import { BuylistService } from '../buylist.service';
@@ -18,12 +22,20 @@ import { CreateBuylistInput } from '../inputs/create-buylist.input';
 import { UpdateBuylistInput } from '../inputs/update-buylist.input';
 import { Buylist } from '../models/buylist.model';
 
+const BUYLIST_ADDED_EVENT = 'buylistAdded';
+
 @Resolver(() => Buylist)
 export class BuylistResolver {
   constructor(
     private buylistService: BuylistService,
     private usersLoaders: UsersLoaders,
+    @Inject(PUB_SUB) private pubSub: RedisPubSub,
   ) {}
+
+  @Subscription(() => Buylist)
+  buylistAdded() {
+    return this.pubSub.asyncIterator(BUYLIST_ADDED_EVENT);
+  }
 
   @Query(() => Buylist)
   async buylist(@Args('id', { type: () => Int }) id: number) {
@@ -43,7 +55,11 @@ export class BuylistResolver {
     @Args('input') list: CreateBuylistInput,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
-    return this.buylistService.create(list, context?.req?.user);
+    const newList = await this.buylistService.create(list, context?.req?.user);
+    this.pubSub.publish(BUYLIST_ADDED_EVENT, {
+      [BUYLIST_ADDED_EVENT]: newList,
+    });
+    return newList;
   }
 
   @UseGuards(GraphqlJwtAuthGuard)

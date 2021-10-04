@@ -9,7 +9,11 @@ async function bootstrap() {
 
   // serializer
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  // Ws broken if down line not commented TODO!
+  // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  // cookie
+  app.use(cookieParser());
 
   // swagger
   const config = new DocumentBuilder()
@@ -20,9 +24,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  // cookie
-  app.use(cookieParser());
 
   await app.listen(3000);
 }
