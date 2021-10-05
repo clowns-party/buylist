@@ -11,7 +11,6 @@ import { BuylistsResolver } from './resolvers/buylists.resolver';
 import { BuylistService } from './buylist.service';
 import UsersLoaders from '../users/loaders/users.loaders';
 import { BuylistResolver } from './resolvers/buylist.resolver';
-import { PubSubModule } from 'src/pub-sub/pub-sub.module';
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { PubSubModule } from 'src/pub-sub/pub-sub.module';
       }),
     }),
     TypeOrmModule.forFeature([Buylist, Member, User]),
-    PubSubModule,
   ],
   providers: [
     BuylistService,

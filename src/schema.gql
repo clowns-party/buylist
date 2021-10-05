@@ -149,5 +149,5 @@ input UpdateProductBuyListInput {
 }
 
 type Subscription {
-  buylistAdded: Buylist!
+  buylistWatch(id: Int!): Buylist!
 }

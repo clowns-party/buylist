@@ -22,7 +22,7 @@ import { CreateBuylistInput } from '../inputs/create-buylist.input';
 import { UpdateBuylistInput } from '../inputs/update-buylist.input';
 import { Buylist } from '../models/buylist.model';
 
-const BUYLIST_ADDED_EVENT = 'buylistAdded';
+export const BUYLIST_WATCH_EVENT = 'buylistWatch';
 
 @Resolver(() => Buylist)
 export class BuylistResolver {
@@ -31,11 +31,6 @@ export class BuylistResolver {
     private usersLoaders: UsersLoaders,
     @Inject(PUB_SUB) private pubSub: RedisPubSub,
   ) {}
-
-  @Subscription(() => Buylist)
-  buylistAdded() {
-    return this.pubSub.asyncIterator(BUYLIST_ADDED_EVENT);
-  }
 
   @Query(() => Buylist)
   async buylist(@Args('id', { type: () => Int }) id: number) {
@@ -55,11 +50,7 @@ export class BuylistResolver {
     @Args('input') list: CreateBuylistInput,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
-    const newList = await this.buylistService.create(list, context?.req?.user);
-    this.pubSub.publish(BUYLIST_ADDED_EVENT, {
-      [BUYLIST_ADDED_EVENT]: newList,
-    });
-    return newList;
+    return this.buylistService.create(list, context?.req?.user);
   }
 
   @UseGuards(GraphqlJwtAuthGuard)
@@ -69,7 +60,15 @@ export class BuylistResolver {
     @Args('id', { type: () => Int }) listId: number,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
-    return this.buylistService.update(listId, list, context?.req?.user);
+    const updatedList = await this.buylistService.update(
+      listId,
+      list,
+      context?.req?.user,
+    );
+    this.pubSub.publish(BUYLIST_WATCH_EVENT, {
+      [BUYLIST_WATCH_EVENT]: updatedList,
+    });
+    return updatedList;
   }
 
   @UseGuards(GraphqlJwtAuthGuard)
@@ -82,6 +81,17 @@ export class BuylistResolver {
       listId,
       context?.req?.user,
     );
+    this.pubSub.close();
     return Boolean(deleted);
+  }
+
+  @Subscription(() => Buylist, {
+    filter: (
+      payload: { [BUYLIST_WATCH_EVENT]: Buylist },
+      variables: { id: number },
+    ) => payload[BUYLIST_WATCH_EVENT].id === variables.id,
+  })
+  buylistWatch(@Args('id', { type: () => Int }) buylistId: number) {
+    return this.pubSub.asyncIterator(BUYLIST_WATCH_EVENT);
   }
 }

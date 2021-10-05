@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 export const PUB_SUB = 'PUB_SUB';
+@Global()
 @Module({
   imports: [ConfigModule],
   providers: [
