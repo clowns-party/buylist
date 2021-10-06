@@ -21,6 +21,8 @@ import { MemberResolver } from './member.resolver';
         host: configService.get('REDIS_HOST'),
         port: configService.get('RESIS_PORT'),
         ttl: 120,
+        password: configService.get('REDIS_AUTH'),
+        db: configService.get('REDIS_DB'),
       }),
     }),
     TypeOrmModule.forFeature([Member, Buylist, User]),

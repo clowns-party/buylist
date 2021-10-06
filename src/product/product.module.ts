@@ -23,6 +23,8 @@ import UsersLoaders from 'src/users/loaders/users.loaders';
         host: configService.get('REDIS_HOST'),
         port: configService.get('RESIS_PORT'),
         ttl: 120,
+        password: configService.get('REDIS_AUTH'),
+        db: configService.get('REDIS_DB'),
       }),
     }),
     TypeOrmModule.forFeature([Product, Buylist, User, Member]),

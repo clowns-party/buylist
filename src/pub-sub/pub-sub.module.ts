@@ -12,7 +12,10 @@ export const PUB_SUB = 'PUB_SUB';
         new RedisPubSub({
           connection: {
             host: configService.get('REDIS_HOST'),
-            port: configService.get('REDIS_PORT'),
+            port: configService.get('RESIS_PORT'),
+            ttl: 120,
+            password: configService.get('REDIS_AUTH'),
+            db: configService.get('REDIS_DB'),
           },
         }),
       inject: [ConfigService],
