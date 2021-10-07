@@ -30,8 +30,11 @@ class TypeOrmConfigService {
         type: 'postgres',
         synchronize: false,
         logging: false,
+        ssl: true,
         extra: {
-          ssl: true,
+          ssl: {
+            rejectUnauthorized: false,
+          },
         },
       };
     }
