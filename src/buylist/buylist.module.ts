@@ -11,20 +11,15 @@ import { BuylistsResolver } from './resolvers/buylists.resolver';
 import { BuylistService } from './buylist.service';
 import UsersLoaders from '../users/loaders/users.loaders';
 import { BuylistResolver } from './resolvers/buylist.resolver';
+import { redisConnector } from 'src/utils/connectors/redis.connector';
 
 @Module({
   imports: [
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('RESIS_PORT'),
-        ttl: 120,
-        password: configService.get('REDIS_AUTH'),
-        db: configService.get('REDIS_DB'),
-      }),
+      useFactory: (configService: ConfigService) =>
+        redisConnector(configService),
     }),
     TypeOrmModule.forFeature([Buylist, Member, User]),
   ],

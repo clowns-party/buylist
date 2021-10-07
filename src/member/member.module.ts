@@ -10,20 +10,15 @@ import * as redisStore from 'cache-manager-redis-store';
 import UsersLoaders from 'src/users/loaders/users.loaders';
 import { User } from 'src/users/user.entity';
 import { MemberResolver } from './member.resolver';
+import { redisConnector } from 'src/utils/connectors/redis.connector';
 
 @Module({
   imports: [
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('RESIS_PORT'),
-        ttl: 120,
-        password: configService.get('REDIS_AUTH'),
-        db: configService.get('REDIS_DB'),
-      }),
+      useFactory: (configService: ConfigService) =>
+        redisConnector(configService),
     }),
     TypeOrmModule.forFeature([Member, Buylist, User]),
   ],

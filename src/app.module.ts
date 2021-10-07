@@ -21,7 +21,6 @@ import { join } from 'path';
       imports: [ConfigModule.forRoot()],
       useFactory: async (configService: ConfigService) => ({
         ...new TypeOrmConfigService(configService).getTypeOrmConfig(),
-        logging: true,
       }),
       inject: [ConfigService],
     }),

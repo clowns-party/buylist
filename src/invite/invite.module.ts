@@ -12,20 +12,15 @@ import { InviteController } from './invite.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { InviteResolver } from './resolvers/intive.resolver';
+import { redisConnector } from 'src/utils/connectors/redis.connector';
 
 @Module({
   imports: [
     CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('RESIS_PORT'),
-        ttl: 120,
-        password: configService.get('REDIS_AUTH'),
-        db: configService.get('REDIS_DB'),
-      }),
+      useFactory: (configService: ConfigService) =>
+        redisConnector(configService),
     }),
     TypeOrmModule.forFeature([Invite, Buylist, User, Member]),
   ],

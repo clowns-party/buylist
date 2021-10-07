@@ -23,6 +23,18 @@ class TypeOrmConfigService {
   }
 
   public getTypeOrmConfig(): TypeOrmModuleOptions {
+    if (this.isProduction()) {
+      return {
+        url: this.getValue('DATABASE_URL'),
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        type: 'postgres',
+        synchronize: false,
+        logging: false,
+        extra: {
+          ssl: true,
+        },
+      };
+    }
     return {
       type: 'postgres',
       host: this.getValue('POSTGRES_HOST'),
@@ -38,6 +50,7 @@ class TypeOrmConfigService {
       },
       ssl: this.isProduction(),
       synchronize: true,
+      logging: true,
     };
   }
 }
