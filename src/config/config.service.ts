@@ -28,7 +28,6 @@ class TypeOrmConfigService {
         url: this.getValue('DATABASE_URL'),
         entities: ['dist/**/*.entity{.ts,.js}'],
         type: 'postgres',
-        synchronize: false,
         logging: false,
         ssl: true,
         extra: {
@@ -36,6 +35,12 @@ class TypeOrmConfigService {
             rejectUnauthorized: false,
           },
         },
+        migrationsTableName: 'migration',
+        migrations: ['../src/migration/*.ts'],
+        cli: {
+          migrationsDir: '../src/migration',
+        },
+        synchronize: true,
       };
     }
     return {
