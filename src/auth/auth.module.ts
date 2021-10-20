@@ -20,7 +20,6 @@ import { LocalStrategy } from './strategy/local.strategy';
   ],
   imports: [
     UsersModule,
-    UsersModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
