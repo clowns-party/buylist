@@ -15,6 +15,9 @@ export class Product {
   @Field({ nullable: true })
   link: string;
 
+  @Field({ nullable: true })
+  public imageUrl: string;
+
   @Field(() => [String], { nullable: true })
   coordinate: string[];
 
