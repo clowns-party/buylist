@@ -8,6 +8,8 @@ export class UpdateProductBuyListInput {
   price?: number;
   @Field({ nullable: true })
   link?: string;
+  @Field({ nullable: true })
+  public imageUrl?: string;
   @Field((type) => [String], { nullable: true })
   coordinate?: string[];
   @Field({ nullable: true })
