@@ -89,6 +89,7 @@ type Query {
 type Mutation {
   register(input: AuthRegisterInput!): User!
   login(input: AuthLoginInput!): String!
+  updateUser(input: updateUserInput!): User!
   createList(input: CreateBuylistInput!): Buylist!
   updateList(id: Int!, input: UpdateBuylistInput!): Buylist!
   deleteList(id: Int!): Boolean!
@@ -112,6 +113,13 @@ input AuthRegisterInput {
 input AuthLoginInput {
   email: String!
   password: String!
+}
+
+input updateUserInput {
+  firstName: String!
+  lastName: String!
+  phone: String!
+  email: String!
 }
 
 input CreateBuylistInput {
