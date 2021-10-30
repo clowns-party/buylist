@@ -8,6 +8,8 @@ export class CreateProductBuyListInput {
   public price: number;
   @Field({ nullable: true })
   public link?: string;
+  @Field({ nullable: true })
+  public imageUrl?: string;
   @Field((type) => [String], { nullable: true })
   public coordinate?: string[];
   @Field()

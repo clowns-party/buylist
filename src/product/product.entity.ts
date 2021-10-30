@@ -23,6 +23,9 @@ export class Product {
   @Column({ nullable: true })
   link: string;
 
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @Column('simple-array', { nullable: true })
   coordinate: string[];
 

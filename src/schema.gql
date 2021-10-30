@@ -15,6 +15,7 @@ type Product {
   name: String!
   price: Int!
   link: String
+  imageUrl: String
   coordinate: [String!]
   comment: String!
   buyBefore: DateTime
@@ -132,6 +133,7 @@ input CreateProductBuyListInput {
   name: String!
   price: Float!
   link: String
+  imageUrl: String
   coordinate: [String!]
   comment: String!
   buyBefore: DateTime
@@ -142,6 +144,7 @@ input UpdateProductBuyListInput {
   name: String
   price: Float
   link: String
+  imageUrl: String
   coordinate: [String!]
   comment: String
   buyBefore: DateTime
