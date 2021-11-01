@@ -1,10 +1,10 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { User } from '../models/users.model';
-import { UsersService } from 'src/users/users.service';
 import { UseGuards } from '@nestjs/common';
-import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { JwtReqUser } from 'src/auth/auth.types';
-import { updateUserInput } from '../inputs/update-user.input';
+import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
+import { UsersService } from 'src/users/users.service';
+import { UpdateUserInput } from '../inputs/update-user.input';
+import { User } from '../models/users.model';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -13,7 +13,7 @@ export class UserResolver {
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => User)
   async updateUser(
-    @Args('input') userData: updateUserInput,
+    @Args('input') userData: UpdateUserInput,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
     const updatedUser = await this.usersService.updateUser(

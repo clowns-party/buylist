@@ -4,7 +4,7 @@ import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
-import { updateUserInput } from './inputs/update-user.input';
+import { UpdateUserInput } from './inputs/update-user.input';
 import { JwtReqUser } from 'src/auth/auth.types';
 
 @Injectable()
@@ -67,19 +67,15 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(fields: updateUserInput, user: JwtReqUser) {
+  async updateUser(fields: UpdateUserInput, user: JwtReqUser) {
     const { id } = user;
     let currentUser = await this.findUser(id);
 
-    if (currentUser) {
-      currentUser = {
-        ...currentUser,
-        ...fields,
-      };
-      const updated = await this.usersRepo.save(currentUser);
-      return updated;
-    } else {
-      throw new HttpException(`User not found`, HttpStatus.NOT_FOUND);
-    }
+    currentUser = {
+      ...currentUser,
+      ...fields,
+    };
+    const updated = await this.usersRepo.save(currentUser);
+    return updated;
   }
 }
