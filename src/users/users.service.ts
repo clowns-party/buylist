@@ -4,6 +4,8 @@ import { In, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserInput } from './inputs/update-user.input';
+import { JwtReqUser } from 'src/auth/auth.types';
 
 @Injectable()
 export class UsersService {
@@ -52,5 +54,28 @@ export class UsersService {
       'User with that email already exists',
       HttpStatus.BAD_REQUEST,
     );
+  }
+
+  async findUser(id: number) {
+    const user = await this.usersRepo.findOne(id);
+    if (!user) {
+      throw new HttpException(
+        `User with id ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return user;
+  }
+
+  async updateUser(fields: UpdateUserInput, user: JwtReqUser) {
+    const { id } = user;
+    let currentUser = await this.findUser(id);
+
+    currentUser = {
+      ...currentUser,
+      ...fields,
+    };
+    const updated = await this.usersRepo.save(currentUser);
+    return updated;
   }
 }
