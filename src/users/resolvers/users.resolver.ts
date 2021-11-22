@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { JwtReqUser } from 'src/auth/auth.types';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
@@ -21,5 +21,11 @@ export class UserResolver {
       context?.req?.user,
     );
     return updatedUser;
+  }
+
+  @Query(() => [User])
+  async searchUsers(@Args('query') query: string) {
+    const users = await this.usersService.searchUsers(query);
+    return users;
   }
 }

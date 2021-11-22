@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { CacheKey, CacheTTL, UseGuards, UseInterceptors } from '@nestjs/common';
 import {
   Context,
   Parent,
@@ -9,8 +9,11 @@ import {
 import { JwtReqUser } from 'src/auth/auth.types';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { User } from 'src/users/models/users.model';
+import { GraphqlHttpCacheInterceptor } from 'src/utils/interceptors/GraphqlHttpCache.interceptor';
+import { HttpCacheInterceptor } from 'src/utils/interceptors/httpCache.interceptor';
 import UsersLoaders from '../../users/loaders/users.loaders';
 import { BuylistService } from '../buylist.service';
+import { GET_BUYLIST_CACHE_KEY } from '../constants/buylistCacheKey.constant';
 import { Buylists } from '../models/buylists.model';
 
 @Resolver(() => Buylists)
@@ -27,6 +30,9 @@ export class BuylistsResolver {
   }
 
   @UseGuards(GraphqlJwtAuthGuard)
+  // @UseInterceptors(GraphqlJwtAuthGuard, GraphqlHttpCacheInterceptor)
+  // @CacheKey(GET_BUYLIST_CACHE_KEY)
+  // @CacheTTL(120)
   @Query(() => [Buylists])
   async myBuylists(@Context() context: { req: { user: JwtReqUser } }) {
     const buylists = await this.buylistService.getUserBuylists(
