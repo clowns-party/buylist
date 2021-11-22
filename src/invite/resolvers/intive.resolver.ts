@@ -37,7 +37,7 @@ export class InviteResolver {
   }
 
   @UseGuards(GraphqlJwtAuthGuard)
-  @Mutation(() => Buylist)
+  @Mutation(() => Invite)
   async invite(
     @Args('buyListId', { type: () => Int }) buyListId: number,
     @Args('toUserId', { type: () => Int }) toUserId: number,
