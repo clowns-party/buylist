@@ -74,7 +74,6 @@ type Invite {
 
 enum InviteStatuses {
   EXPECTATION
-  REJECTED
   ACCEPTED
 }
 

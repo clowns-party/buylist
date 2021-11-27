@@ -10,7 +10,6 @@ import {
 
 export enum InviteStatuses {
   EXPECTATION = 'expectation',
-  REJECTED = 'rejected',
   ACCEPTED = 'accepted',
 }
 

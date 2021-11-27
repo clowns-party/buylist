@@ -30,7 +30,27 @@ export class InviteService {
     return invite;
   }
 
+  async findInvite(invite: CreateInviteDto) {
+    const currentInvite = await this.inviteRepo.findOne({
+      where: {
+        buylist: {
+          id: invite.buyListId,
+        },
+        to: {
+          id: invite.to,
+        },
+      },
+      relations: ['buylist', 'from', 'to', 'buylist.members'],
+    });
+    return currentInvite;
+  }
+
   async create(invite: CreateInviteDto, user: JwtReqUser) {
+    const userWasInvited = await this.findInvite(invite);
+
+    if (userWasInvited) {
+      throw new HttpException('This user was invited!', HttpStatus.BAD_REQUEST);
+    }
     if (user.id === invite.to) {
       throw new HttpException(
         'You can`t invite yourself',
@@ -107,13 +127,18 @@ export class InviteService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    invite.status = InviteStatuses.REJECTED;
-    const updatedInvite = await this.inviteRepo.save(invite);
-    return updatedInvite;
+    await this.inviteRepo.delete(invite.id);
+    return true;
   }
-  // Todo maybe bulistId (long await)
-  async leave(id: number, user: JwtReqUser) {
-    const invite = await this.findById(id);
+
+  async leave(buyListId: number, user: JwtReqUser) {
+    const invite = await this.findInvite({ buyListId, to: user.id });
+    if (!invite) {
+      throw new HttpException(
+        `You cant't leave from this buylist`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
     if (invite.buylist.ownerId === user.id) {
       throw new HttpException(

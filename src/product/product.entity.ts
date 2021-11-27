@@ -1,3 +1,4 @@
+import { Buylist } from 'src/buylist/buylist.entity';
 import { User } from 'src/users/user.entity';
 import {
   Entity,
@@ -39,9 +40,14 @@ export class Product {
   color: string;
 
   @Index('product_authorId_index')
-  @ManyToOne((type) => User)
+  @ManyToOne((type) => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'authorId' })
   author: User;
+
+  @Index('product_buylistId_index')
+  @ManyToOne((type) => Buylist, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'buylistId' })
+  buylist: Buylist;
 
   @RelationId((product: Product) => product.author)
   public authorId: number;

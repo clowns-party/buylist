@@ -2,7 +2,6 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtReqUser } from 'src/auth/auth.types';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
-import { Buylist } from 'src/buylist/models/buylist.model';
 import { InviteService } from '../invite.service';
 import { Invite } from '../models/invite.model';
 
@@ -52,9 +51,9 @@ export class InviteResolver {
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => Boolean)
   async leave(
-    @Args('id', { type: () => Int }) inviteId: number,
+    @Args('id', { type: () => Int }) buylistId: number,
     @Context() context: { req: { user: JwtReqUser } },
   ) {
-    return this.inviteService.leave(inviteId, context.req.user);
+    return this.inviteService.leave(buylistId, context.req.user);
   }
 }
