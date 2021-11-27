@@ -91,11 +91,7 @@ type Query {
 type Mutation {
   register(input: AuthRegisterInput!): User!
   login(input: AuthLoginInput!): String!
-<<<<<<< HEAD
-  updateUser(input: updateUserInput!): User!
-=======
   updateUser(input: UpdateUserInput!): User!
->>>>>>> cbde93b2761f7af2d2e036aabefd1fb7ffdb84f4
   createList(input: CreateBuylistInput!): Buylist!
   updateList(id: Int!, input: UpdateBuylistInput!): Buylist!
   deleteList(id: Int!): Boolean!
@@ -103,8 +99,8 @@ type Mutation {
   updateProduct(productId: Int!, buyListId: Int!, input: UpdateProductBuyListInput!): Buylist!
   deleteProduct(buyListId: Int!, productId: Int!): Buylist!
   acceptInvite(id: Int!): Invite!
-  declineInvite(id: Int!): Buylist!
-  invite(toUserId: Int!, buyListId: Int!): Buylist!
+  declineInvite(id: Int!): Invite!
+  invite(toUserId: Int!, buyListId: Int!): Invite!
   leave(id: Int!): Boolean!
 }
 
