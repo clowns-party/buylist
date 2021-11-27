@@ -99,8 +99,8 @@ type Mutation {
   updateProduct(productId: Int!, buyListId: Int!, input: UpdateProductBuyListInput!): Buylist!
   deleteProduct(buyListId: Int!, productId: Int!): Buylist!
   acceptInvite(id: Int!): Invite!
-  declineInvite(id: Int!): Buylist!
-  invite(toUserId: Int!, buyListId: Int!): Buylist!
+  declineInvite(id: Int!): Invite!
+  invite(toUserId: Int!, buyListId: Int!): Invite!
   leave(id: Int!): Boolean!
 }
 

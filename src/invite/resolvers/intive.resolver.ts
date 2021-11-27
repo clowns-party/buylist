@@ -28,7 +28,7 @@ export class InviteResolver {
   }
 
   @UseGuards(GraphqlJwtAuthGuard)
-  @Mutation(() => Buylist)
+  @Mutation(() => Invite)
   async declineInvite(
     @Args('id', { type: () => Int }) inviteId: number,
     @Context() context: { req: { user: JwtReqUser } },
