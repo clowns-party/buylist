@@ -79,6 +79,7 @@ enum InviteStatuses {
 }
 
 type Query {
+  searchUsers(query: String!): [User!]!
   buylists: [Buylists!]!
   myBuylists: [Buylists!]!
   buylist(id: Int!): Buylist!
@@ -90,7 +91,11 @@ type Query {
 type Mutation {
   register(input: AuthRegisterInput!): User!
   login(input: AuthLoginInput!): String!
+<<<<<<< HEAD
   updateUser(input: updateUserInput!): User!
+=======
+  updateUser(input: UpdateUserInput!): User!
+>>>>>>> cbde93b2761f7af2d2e036aabefd1fb7ffdb84f4
   createList(input: CreateBuylistInput!): Buylist!
   updateList(id: Int!, input: UpdateBuylistInput!): Buylist!
   deleteList(id: Int!): Boolean!
@@ -116,11 +121,11 @@ input AuthLoginInput {
   password: String!
 }
 
-input updateUserInput {
-  firstName: String!
-  lastName: String!
-  phone: String!
-  email: String!
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  phone: String
+  email: String
 }
 
 input CreateBuylistInput {
