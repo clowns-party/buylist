@@ -37,10 +37,12 @@ export class ProductService {
   ) {
     const list = await this.buylistService.findById(buylistId);
     const createdProduct = this.productRepo.create({
+      buylist: list,
       ...product,
     });
 
     createdProduct.author = user;
+
     const savedProduct = await this.productRepo.save(createdProduct);
     if (list?.products) {
       list.products.push(savedProduct);
